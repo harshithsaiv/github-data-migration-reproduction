@@ -23,6 +23,78 @@ services:
       timeout: 20s
       retries: 10
 
+  # Users Partition Database
+  mysql-users:
+    image: mysql:8.0
+    container_name: github-users-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: github_users
+      MYSQL_USER: github_user
+      MYSQL_PASSWORD: github_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_users_data:/var/lib/mysql
+      - ../databases/partitions/users_partition.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - github-network
+
+  # Repositories Partition Database
+  mysql-repositories:
+    image: mysql:8.0
+    container_name: github-repos-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: github_repositories
+      MYSQL_USER: github_user
+      MYSQL_PASSWORD: github_pass
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_repos_data:/var/lib/mysql
+      - ../databases/partitions/repositories_partition.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - github-network
+
+  # Issues Partition Database
+  mysql-issues:
+    image: mysql:8.0
+    container_name: github-issues-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: github_issues
+      MYSQL_USER: github_user
+      MYSQL_PASSWORD: github_pass
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql_issues_data:/var/lib/mysql
+      - ../databases/partitions/issues_partition.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - github-network
+
+  # Gists Partition Database  
+  mysql-gists:
+    image: mysql:8.0
+    container_name: github-gists-db
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: github_gists
+      MYSQL_USER: github_user
+      MYSQL_PASSWORD: github_pass
+    ports:
+      - "3310:3306"
+    volumes:
+      - mysql_gists_data:/var/lib/mysql
+      - ../databases/partitions/gists_partition.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - github-network
+
   # SQL Proxy (Phase 1 - Simple HTTP API)
   sql-proxy:
     build:
@@ -51,3 +123,7 @@ networks:
 
 volumes:
   mysql_monolith_data:
+  mysql_users_data:
+  mysql_repos_data:
+  mysql_issues_data:
+  mysql_gists_data:
