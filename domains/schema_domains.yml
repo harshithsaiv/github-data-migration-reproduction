@@ -1,0 +1,84 @@
+# Schema Domain Definitions
+# This YAML file defines logical boundaries between table groups
+# Every table must belong to exactly one domain
+
+users:
+  description: "User accounts, profiles, and user-specific settings"
+  tables:
+    - users
+    - user_settings
+    - user_profiles
+  primary_key_prefix: "usr"
+  migration_priority: 1
+
+repositories:
+  description: "Repository data, collaborators, stars, and forks"
+  tables:
+    - repositories
+    - repository_collaborators
+    - stars
+    - repository_forks
+  primary_key_prefix: "repo"
+  migration_priority: 2
+  depends_on:
+    - users  # repositories reference users.id
+
+issues:
+  description: "Issues, comments, labels, and milestones"
+  tables:
+    - issues
+    - issue_comments
+    - labels
+    - issue_labels
+    - milestones
+  primary_key_prefix: "issue"
+  migration_priority: 3
+  depends_on:
+    - users        # issues reference users.id
+    - repositories # issues reference repositories.id
+
+gists:
+  description: "Gists, gist files, comments, and stars"
+  tables:
+    - gists
+    - gist_files
+    - gist_comments
+    - starred_gists
+  primary_key_prefix: "gist"
+  migration_priority: 4
+  depends_on:
+    - users  # gists reference users.id
+
+# Cross-domain relationships that must be handled carefully
+cross_domain_relationships:
+  - source_domain: repositories
+    source_table: repositories
+    source_column: owner_id
+    target_domain: users
+    target_table: users
+    target_column: id
+    relationship_type: foreign_key
+    
+  - source_domain: issues
+    source_table: issues
+    source_column: repository_id
+    target_domain: repositories
+    target_table: repositories
+    target_column: id
+    relationship_type: foreign_key
+    
+  - source_domain: issues
+    source_table: issues
+    source_column: author_id
+    target_domain: users
+    target_table: users
+    target_column: id
+    relationship_type: foreign_key
+    
+  - source_domain: gists
+    source_table: gists
+    source_column: owner_id
+    target_domain: users
+    target_table: users
+    target_column: id
+    relationship_type: foreign_key
