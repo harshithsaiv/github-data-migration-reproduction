@@ -71,3 +71,7 @@ This implementation demonstrates:
 ├── playbooks/           # Migration playbooks
 └── examples/            # Sample applications and queries
 ```
+## References
+
+This project is based on learnings from:
+- [GitHub's Database Migration Strategy - YouTube](https://www.youtube.com/watch?v=Tq1fif3rcnQ)
