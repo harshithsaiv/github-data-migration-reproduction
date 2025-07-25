@@ -30,10 +30,10 @@ This implementation demonstrates GitHub's partitioning strategy:
                               │                       
                               │            ┌─────────────────┐
                               └────────────│   Partitioned   │
-                                          │   Databases     │
-                                          │ (users, repos,  │
-                                          │ issues, gists)  │
-                                          └─────────────────┘
+                                           │   Databases     │
+                                           │ (users, repos,  │
+                                           │ issues, gists)  │
+                                           └─────────────────┘
 ```
 
 ### Phase 5: Final State (Partitions Only)
